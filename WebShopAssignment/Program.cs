@@ -19,8 +19,10 @@ class Shop
     }
     public void OpretOrdre(int telefonnummer)
     {
-        foreach(Kunde kunde in kundeliste)
+        int i = 0;
+        while(i < kundeliste.Count)
         {
+            Kunde kunde = kundeliste[i];
             if(kunde.HarTelefonnummer(telefonnummer))
             {
                 Ordre ordre = new Ordre(kunde);
@@ -28,6 +30,7 @@ class Shop
                 Console.WriteLine("Ordren blev oprettet!");
                 return;
             }
+            i++;
         }
         Console.WriteLine("Kunden findes ikke.");
         
@@ -53,6 +56,7 @@ class Ordre
 {
     private static int OrdreTæller = 0;
     private int OrdreNummer;
+    private bool AfventerBetaling = true;
     private Kunde kunde;
     public Ordre(Kunde kunde)
     {
