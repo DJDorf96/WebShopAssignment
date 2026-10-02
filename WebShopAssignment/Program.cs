@@ -7,6 +7,8 @@ Shop shop = new Shop();
 shop.OpretKunde("Jens Jensen", 12345678);
 shop.OpretOrdre(12345678);
 
+shop.FindManglendeBetaling();
+
 
 class Shop
 {
@@ -35,6 +37,21 @@ class Shop
         Console.WriteLine("Kunden findes ikke.");
         
     }
+    public void FindManglendeBetaling()
+    {
+        int i = 0;
+        while(i < ordreliste.Count)
+        {
+            Ordre ordre = ordreliste[i];
+            if(ordre.ManglerBetaling())
+            {
+                Console.WriteLine("Vi har fundet en manglende betaling!");
+                Console.WriteLine($"OrdreNummer: {ordre.HentOrdreNummer()}, Navn: {ordre.HentKundeNavn()}");
+            }
+            i++;
+
+        }
+    }
 }
 
 class Kunde
@@ -50,6 +67,10 @@ class Kunde
     {
         return TelefonNummer == telefonnummer;
     }
+    public string HentNavn() // "Dørklokke" til at hente et navn, nu hvor Navn er Private.
+    {
+        return Navn;
+    }
 }
 
 class Ordre
@@ -63,5 +84,17 @@ class Ordre
         OrdreTæller++;
         OrdreNummer = OrdreTæller;
         this.kunde = kunde;
+    }
+    public bool ManglerBetaling()
+    {
+        return AfventerBetaling;
+    }
+    public string HentKundeNavn()
+    {
+        return kunde.HentNavn();
+    }
+    public int HentOrdreNummer()
+    {
+        return OrdreNummer;
     }
 }
