@@ -12,6 +12,12 @@ shop.FindManglendeBetaling(); // Tjekker systemet for manglende betalinger og ud
 shop.RegistrerIndbetaling(1); // Registerer at Ordrenummer 1 har betalt.
 Console.WriteLine("----------------------------------------------------------");
 shop.RegistrerIndbetaling(1); // Viser her at AfventerBetaling har ændret sig fra true til false.
+Console.WriteLine("----------------------------------------------------------");
+shop.AfsendOrdre(1); // Afsender en ordre hvor AfventerBetaling = false + fjerner ordren fra ordrelisten.
+Console.WriteLine("----------------------------------------------------------");
+shop.AfsendOrdre(1); // Beviser at en betalt ordre der er afsendt, nu er slettet fra ordrelisten.
+Console.WriteLine("----------------------------------------------------------");
+shop.OpretOrdre(12345678); // Beviser at kunden stadig eksisterer.
 
 
 class Shop
@@ -77,6 +83,32 @@ class Shop
             }
             i++;
         }
+        Console.WriteLine("Ordrenummeret findes ikke i systemet.");
+    }
+    public void AfsendOrdre(int ordrenummer)
+    {
+        int i = 0;
+        while(i < ordreliste.Count)
+        {
+            Ordre ordre = ordreliste[i];
+            if(ordre.HarOrdreNummer(ordrenummer))
+            {
+                Console.WriteLine("Vi har fundet ordren.");
+                if(ordre.ManglerBetaling())
+                {
+                    Console.WriteLine("Ordren mangler betaling. Afsendelse annulleret.");
+                    return;
+                }
+                else
+                {
+                    Console.WriteLine("Ordren er betalt. Afsendelse påbegyndt.");
+                    ordreliste.Remove(ordre);
+                    return;
+                }
+            }
+            i++;
+        }
+        Console.WriteLine("Ordren findes ikke i systemet.");
     }
 }
 
