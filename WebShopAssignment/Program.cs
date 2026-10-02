@@ -4,10 +4,14 @@ using System.Security.Cryptography;
 
 Shop shop = new Shop();
 
-shop.OpretKunde("Jens Jensen", 12345678);
-shop.OpretOrdre(12345678);
+shop.OpretKunde("Jens Jensen", 12345678); // Opretter en kunde.
+shop.OpretOrdre(12345678); // Opretter en ordre gennem telefonnummeret.
 
-shop.FindManglendeBetaling();
+shop.FindManglendeBetaling(); // Tjekker systemet for manglende betalinger og udskriver hvem der mangler at betale.
+
+shop.RegistrerIndbetaling(1); // Registerer at Ordrenummer 1 har betalt.
+Console.WriteLine("----------------------------------------------------------");
+shop.RegistrerIndbetaling(1); // Viser her at AfventerBetaling har ændret sig fra true til false.
 
 
 class Shop
@@ -50,6 +54,28 @@ class Shop
             }
             i++;
 
+        }
+    }
+    public void RegistrerIndbetaling(int ordrenummer)
+    {
+        int i = 0;
+        while(i < ordreliste.Count)
+        {
+            Ordre ordre = ordreliste[i];
+            if(ordre.HarOrdreNummer(ordrenummer))
+            {
+                if(ordre.ManglerBetaling())
+                {
+                    ordre.ÆndreBetaling();
+                    Console.WriteLine(ordre.HentOrdreNummer());
+                    Console.WriteLine(ordre.ManglerBetaling());
+                    Console.WriteLine("Ordren er nu betalt.");
+                    return;
+                }
+                Console.WriteLine("Ordren er allerede betalt.");
+                return;
+            }
+            i++;
         }
     }
 }
@@ -96,5 +122,14 @@ class Ordre
     public int HentOrdreNummer()
     {
         return OrdreNummer;
+    }
+    public bool ÆndreBetaling()
+    {
+        AfventerBetaling = false;
+        return AfventerBetaling;
+    }
+    public bool HarOrdreNummer(int ordrenummer) // Tjekker om ordrenummer findes.
+    {
+        return OrdreNummer == ordrenummer;
     }
 }
